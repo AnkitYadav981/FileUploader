@@ -35,11 +35,11 @@ export function FileUploader() {
         >
             <p className="text-sm text-gray-600">Click or press enter to select file</p>
         </div>
-        <div className="flex gap-2">
+        <div className=" gap-2">
             {state.status == "ready" && (
                     <button 
                     onClick={start}
-                    className="px-4 py-2 rounded bg-blue-600 text-white disabled:opacity-50"
+                    className="w-full  px-4 py-2 rounded bg-blue-600 text-white disabled:opacity-50"
                     >
                         Start Upload
                     </button>
@@ -48,7 +48,7 @@ export function FileUploader() {
             {state.status == "uploading" && (
                 <button 
                 onClick={pause}
-                className="rounded bg-yellow-500 px-4 py-2 text-white"
+                className="w-full rounded bg-yellow-500 px-4 py-2 text-white"
                 >
                     Pause
                 </button>
@@ -56,7 +56,7 @@ export function FileUploader() {
             {state.status == "paused" && (
                 <button 
                 onClick={resume}
-                className="rounded bg-green-600 px-4 py-2 text-white"
+                className="w-full rounded bg-green-600 px-4 py-2 text-white"
                 >
                     Resume
                 </button>
@@ -64,7 +64,7 @@ export function FileUploader() {
             {(state.status == "completed" || state.status == "error") && (
                 <button 
                 onClick={reset}
-                className="rounded bg-gray-500 px-4 py-2 text-white"
+                className="w-full rounded bg-gray-500 px-4 py-2 text-white"
                 >
                     Reset
                 </button>
