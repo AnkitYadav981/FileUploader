@@ -33,7 +33,7 @@ export function FileUploader() {
         onKeyDown={onKeyDown}
         className="cursor-pointer rounded border-2 border-dashed p-6 text-center focus:outline-none focus:ring"
         >
-            <p className="text-sm text-gray-600">Click or press enter to select file</p>
+            <p className="text-sm text-gray-600">Click to select file</p>
         </div>
         <div className=" gap-2">
             {state.status == "ready" && (
