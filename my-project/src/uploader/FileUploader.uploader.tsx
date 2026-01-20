@@ -64,7 +64,7 @@ export function FileUploader() {
             {(state.status == "completed" || state.status == "error") && (
                 <button 
                 onClick={reset}
-                className="w-full rounded bg-gray-500 px-4 py-2 text-white"
+                className="w-full rounded bg-gray-400 px-4 py-2 text-white"
                 >
                     Reset
                 </button>
