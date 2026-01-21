@@ -1,4 +1,16 @@
-import type { UploadStatus, Chunk } from "./StateMachine.uploader";
+import type { UploadStatus, Chunk } from "./State.uploader";
+
+
+
+export type PossibleActions = 
+    | { type: "SelectFile"; file: File; chunks: Chunk[] }
+    | { type: "UploadStart" }
+    | { type: "Pause" }
+    | { type: "Resume" }
+    | { type: "UploadingProgres"; index: number }
+    | { type: "Err"; message: string }
+    | { type: "Completed" }
+    | { type: "Reset" };
 
 export type UploadState = {
     file : File | null,
@@ -7,17 +19,7 @@ export type UploadState = {
     status : UploadStatus,
     error? : string,
 }
-
-export type UploadAction = 
-    | { type: "SELECT_FILE"; file: File; chunks: Chunk[] }
-    | { type: "START" }
-    | { type: "PAUSE" }
-    | { type: "RESUME" }
-    | { type: "PROGRESS"; index: number }
-    | { type: "ERROR"; message: string }
-    | { type: "COMPLETE" }
-    | { type: "RESET" };
-
+// This is the first state
 export const initialState : UploadState = {
     file : null,
     chunks : [],
@@ -25,29 +27,30 @@ export const initialState : UploadState = {
     status : "idle"
 }
 
-export function uploadReducer(state : UploadState, action : UploadAction) : UploadState {
+//uploader
+export function uploadReducer(state : UploadState, action : PossibleActions) : UploadState {
     console.log("action in machine uploader",action)
     switch(action.type){
-        case "SELECT_FILE":
+        case "SelectFile":
             return {
                 file : action.file,
                 chunks : action.chunks,
                 current : 0,
                 status : "ready"
             }
-        case "START":
+        case "UploadStart":
             return {...state, status : "uploading"}
-        case "PAUSE":
+        case "Pause":
             return {...state, status : "paused"}
-        case "RESUME":
+        case "Resume":
             return {...state, status : "uploading"}
-        case "PROGRESS":
+        case "UploadingProgres":
             return {...state, current : action.index}
-        case "ERROR":
+        case "Err":
             return {...state, status : "error", error : action.message}
-        case "COMPLETE":
+        case "Completed":
             return {...state, status : "completed"}
-        case "RESET":
+        case "Reset":
             return {...initialState};
         default :
             return state;

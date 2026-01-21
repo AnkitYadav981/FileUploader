@@ -1,4 +1,4 @@
-import type { Chunk } from "./StateMachine.uploader";
+import type { Chunk } from "./State.uploader";
 
 export const ChunkSize = 1024*1024; // this defines 1MB
 

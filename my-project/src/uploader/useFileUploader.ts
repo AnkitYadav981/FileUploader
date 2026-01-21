@@ -1,6 +1,6 @@
 import { useEffect, useReducer, useRef } from "react";
 import { initialState, uploadReducer } from "./Machine.uploader";
-import type { Chunk } from "./StateMachine.uploader";
+import type { Chunk } from "./State.uploader";
 import { CreateChunks } from "./utils.uploader";
 import { mockServer } from "../mock/MockServer";
 
@@ -10,16 +10,18 @@ export function useUploader() {
 
     async function selectFile(file : File){
         const chunks : Chunk[] = await CreateChunks(file);
-        dispatch({type : "SELECT_FILE",file, chunks})
+        dispatch({type : "SelectFile",file, chunks})
     }
 
     useEffect(()=>{
         if (state.status != "uploading") {
+            console.log("not able to upload")
             return
         }
         pauseRef.current = false;
         async function runUpload() {
             if (!state.file) {
+                console.log("no file")
                 return
             }
             for (let i = state.current; i < state.chunks.length; i++) {
@@ -29,34 +31,34 @@ export function useUploader() {
                 const chunk = state.chunks[i];
                 try {
                     await mockServer(chunk, state.file);
-                    dispatch({type : "PROGRESS", index : i+1})
+                    dispatch({type : "UploadingProgres", index : i+1})
                 } catch (error : unknown) {
-                    const message = error instanceof Error ? error.message : "Unknown error";
-                    dispatch({type : "ERROR", message})
+                    dispatch({type : "Err", message : error as string})
                     return;
                 }
             }
-            dispatch({type: "COMPLETE"});
+            dispatch({type: "Completed"});
         }
         runUpload();
     },[state.status, state.current, state.file, state.chunks])
 
     function start() {
         if (state.status == "ready" || state.status == "paused") {
-            dispatch({type : "START"})
+            console.log("start")
+            dispatch({type : "UploadStart"})
         }
     }
     function pause() {
         pauseRef.current = true;
-        dispatch({type : "PAUSE"})
+        dispatch({type : "Pause"})
     }
     function resume() {
         pauseRef.current = false;
-        dispatch({type : "RESUME"})
+        dispatch({type : "Resume"})
     }
 
     function reset() {
-        dispatch({type : "RESET"})
+        dispatch({type : "Reset"})
     }
 
     const progress = state.chunks.length == 0 ? 0 : Math.round((state.current / state.chunks.length) * 100)

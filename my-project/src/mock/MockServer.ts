@@ -1,5 +1,5 @@
 
-import type { Chunk } from "../uploader/StateMachine.uploader";
+import type { Chunk } from "../uploader/State.uploader";
 
 type ServerRecord = {
     uploaded : Set<number>,
