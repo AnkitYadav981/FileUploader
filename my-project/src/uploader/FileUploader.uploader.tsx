@@ -1,11 +1,16 @@
 import React, { useRef, useState } from "react";
 import { useUploader } from "./useFileUploader";
 
+type UploaderOverride = ReturnType<typeof useUploader>;
 
-export function FileUploader() {
+
+
+
+export function FileUploader({ override }: { override?: UploaderOverride }) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [dragActive, setDragActive] = useState(false);
 
+  const real = useUploader();
   const {
     state,
     start,
@@ -14,7 +19,10 @@ export function FileUploader() {
     reset,
     selectFile,
     progress,
-  } = useUploader();
+  } = override ?? real;
+
+
+  
  // handles file selection
   function handleFileSelectFile(file?: File) {
     if (!file) return;
